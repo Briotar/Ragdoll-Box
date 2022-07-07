@@ -14,7 +14,7 @@ public class PlayerInput : MonoBehaviour
         _camera = Camera.main;
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         if (Input.GetMouseButton(0))
         {
@@ -23,8 +23,6 @@ public class PlayerInput : MonoBehaviour
             _worldPosition = _camera.ScreenToWorldPoint(_screenPosition);
 
             Direction = (_worldPosition - transform.position).normalized;
-
-            transform.GetComponent<Rigidbody>().velocity = Direction * 5;
         }
     }
 }

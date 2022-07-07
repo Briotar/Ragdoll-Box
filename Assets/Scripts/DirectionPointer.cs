@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(SpriteRenderer))]
-public class PlayerPointer : MonoBehaviour
+public class DirectionPointer : MonoBehaviour
 {
     [SerializeField] private PlayerInput _playerInput;
     [SerializeField] private float _radius = 1;
@@ -21,7 +21,7 @@ public class PlayerPointer : MonoBehaviour
         _currentRotation = 0;
     }
 
-    private void LateUpdate()
+    private void FixedUpdate()
     {
         if (Input.GetMouseButton(0))
         {
@@ -35,6 +35,7 @@ public class PlayerPointer : MonoBehaviour
             _sprite.enabled = false;
         }
     }
+
     protected void CalculateRotationAngle(Vector3 direction)
     {
         _currentRotation = Mathf.Acos(direction.y) * Mathf.Rad2Deg;

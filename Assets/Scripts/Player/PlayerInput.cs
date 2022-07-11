@@ -5,7 +5,7 @@ public class PlayerInput : MonoBehaviour
     private Camera _camera;
 
     private Vector3 _screenPosition;
-    private Vector3 _worldPosition;
+    public Vector3 WorldPosition { get; private set; }
 
     public Vector3 Direction { get; private set; }
 
@@ -20,9 +20,9 @@ public class PlayerInput : MonoBehaviour
         {
             _screenPosition = Input.mousePosition;
             _screenPosition.z = 20;
-            _worldPosition = _camera.ScreenToWorldPoint(_screenPosition);
+            WorldPosition = _camera.ScreenToWorldPoint(_screenPosition);
 
-            Direction = (_worldPosition - transform.position).normalized;
+            Direction = (WorldPosition - transform.position).normalized;
         }
     }
 }

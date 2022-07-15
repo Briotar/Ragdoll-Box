@@ -1,7 +1,7 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody))]
 public class PlayerMover : MonoBehaviour
 {
     [SerializeField] private PlayerInput _playerInput;
@@ -11,13 +11,20 @@ public class PlayerMover : MonoBehaviour
     [SerializeField] private float _jumpForce = 1.5f;
     [SerializeField] private float _fallForce = 0.4f;
 
-    private Rigidbody _rigidbody;
+    [SerializeField] private Rigidbody _rigidbody;
 
     private bool _canJump = true;
 
-    private void Start()
+    public event Action<bool> OnGround;
+    public event Action<float> Speed;
+
+    private void Update()
     {
-        _rigidbody = GetComponent<Rigidbody>();
+        if (_playerInput.Direction.x < 0f)
+            gameObject.transform.eulerAngles = new Vector3(0f, -90f, 0f);
+        else if(_playerInput.Direction.x > 0f)
+            gameObject.transform.eulerAngles = new Vector3(0f, 90f, 0f);
+
     }
 
     //TODO отрефакторить метод + 2 магических числа + переворачить вектор а не просто смотреть значение
@@ -27,12 +34,17 @@ public class PlayerMover : MonoBehaviour
         {
             if (StayOnGround(_onGroundPoint.position, _radius))
                 if (_playerInput.Direction.y <= 0.45f)
+                {
                     _rigidbody.velocity = new Vector3(_playerInput.Direction.x, 0f, 0f) * _speed;
+
+                    Speed.Invoke(1f);
+                }
                 else
                 {
                     if (_canJump)
                     {
                         _rigidbody.AddForce(Vector3.up * _speed * _jumpForce, ForceMode.VelocityChange);
+                       
                         _canJump = false;
                         StartCoroutine(JumpCooldown());
                     }
@@ -40,6 +52,11 @@ public class PlayerMover : MonoBehaviour
             else
                 if (_playerInput.Direction.y <= -0.2f)
                     _rigidbody.AddForce(_playerInput.Direction * _fallForce, ForceMode.VelocityChange);
+        }
+        else
+        {
+            StayOnGround(_onGroundPoint.position, _radius);
+            Speed.Invoke(0f);
         }
     }
 
@@ -49,9 +66,13 @@ public class PlayerMover : MonoBehaviour
         foreach (var hitCollider in hitColliders)
         {
             if (hitCollider.GetComponent<Ground>())
+            {
+                OnGround.Invoke(true);
                 return true;
+            }
         }
 
+        OnGround.Invoke(false);
         return false;
     }
 

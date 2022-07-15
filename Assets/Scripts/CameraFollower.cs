@@ -3,6 +3,7 @@ using UnityEngine;
 public class CameraFollower : MonoBehaviour
 {
     [SerializeField] private Player _player;
+
     private Vector3 _offset;
 
     void Start()

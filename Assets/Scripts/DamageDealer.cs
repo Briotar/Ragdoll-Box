@@ -2,7 +2,10 @@ using UnityEngine;
 
 public class DamageDealer : MonoBehaviour
 {
-    [SerializeField] private float _hitForse = 2f;
+    [SerializeField] private PlayerInput _playerInput;
+
+    private Vector3 _hitDirection;
+    private float _hitForse = 20f;
 
     private Enemy _enemy;
 
@@ -10,7 +13,9 @@ public class DamageDealer : MonoBehaviour
     {
         if(other.TryGetComponent<Enemy>(out _enemy))
         {
-            _enemy.ApplyDamage(_hitForse);
+            _hitDirection = (new Vector3(0f, 1f, 0f) + _playerInput.Direction).normalized + Vector3.up;
+
+            _enemy.ApplyDamage(_hitForse, _hitDirection);
         }
     }
 }

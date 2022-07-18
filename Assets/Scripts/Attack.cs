@@ -6,16 +6,16 @@ public class Attack : MonoBehaviour
     [SerializeField] private Joint _hand;
     [SerializeField] private Transform _arm;
     [SerializeField] private PlayerInput _playerInput;
+    [SerializeField] private Collider _collider;
 
     private Rigidbody _ConnectedArm;
     private Vector3 _firstPosition;
-    private float _lerpSpeed = 0.1f;
+    private float _lerpSpeed = 0.15f;
 
-    private bool _canAttack;
+    private bool _canAttack = true;
 
     private void Start()
     {
-        _canAttack = true;
         _ConnectedArm = _hand.connectedBody;
         _firstPosition = _hand.transform.localPosition;
     }
@@ -26,19 +26,24 @@ public class Attack : MonoBehaviour
         {
             if(_canAttack)
             {
+                _collider.enabled = true;
+
                 SetHandPosition(_hand.transform.position, _playerInput.WorldPosition);
 
                 StartCoroutine(Attacking());
+                StartCoroutine(AttackCooldown());
             }
             else
             {
-                SetHandLocalPosition(_hand.transform.localPosition, _firstPosition);
+                _collider.enabled = false;
 
-                _canAttack = true;
+                SetHandLocalPosition(_hand.transform.localPosition, _firstPosition);
             }
         }
         else
         {
+            _collider.enabled = false;
+
             SetHandLocalPosition(_hand.transform.localPosition, _firstPosition);
         }
     }
@@ -68,8 +73,15 @@ public class Attack : MonoBehaviour
 
     private IEnumerator Attacking()
     {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.4f);
 
         _canAttack = false;
+    }
+
+    private IEnumerator AttackCooldown()
+    {
+        yield return new WaitForSeconds(2f);
+
+        _canAttack = true;
     }
 }

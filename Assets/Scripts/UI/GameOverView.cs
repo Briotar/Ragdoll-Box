@@ -3,7 +3,8 @@ using UnityEngine;
 public class GameOverView : MonoBehaviour
 {
     [SerializeField] private Player _player;
-    [SerializeField] private GameObject _text;
+    [SerializeField] private GameObject _gameoverScreen;
+    [SerializeField] private GameObject _scrollView;
 
     private void OnEnable()
     {
@@ -23,6 +24,7 @@ public class GameOverView : MonoBehaviour
 
     private void ShowEndGameScreen()
     {
-        _text.SetActive(true);
+        _scrollView.SetActive(false);
+        _gameoverScreen.SetActive(true);
     }
 }

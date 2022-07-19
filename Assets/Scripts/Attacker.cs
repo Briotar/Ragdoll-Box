@@ -1,11 +1,10 @@
 using System.Collections;
 using UnityEngine;
 
-public class Attack : MonoBehaviour
+public class Attacker : MonoBehaviour
 {
-    [SerializeField] private Joint _hand;
+    [SerializeField] private Joint _foreArm;
     [SerializeField] private Transform _arm;
-    [SerializeField] private PlayerInput _playerInput;
     [SerializeField] private Collider _collider;
 
     private Rigidbody _ConnectedArm;
@@ -16,52 +15,48 @@ public class Attack : MonoBehaviour
 
     private void Start()
     {
-        _ConnectedArm = _hand.connectedBody;
-        _firstPosition = _hand.transform.localPosition;
+        _ConnectedArm = _foreArm.connectedBody;
+        _firstPosition = _foreArm.transform.localPosition;
     }
 
-    private void FixedUpdate()
+    protected void Attack(Vector3 attackPoint)
     {
-        if (Input.GetMouseButton(0))
+        if (_canAttack)
         {
-            if(_canAttack)
-            {
-                _collider.enabled = true;
+            _collider.enabled = true;
 
-                SetHandPosition(_hand.transform.position, _playerInput.WorldPosition);
+            SetHandPosition(_foreArm.transform.position, attackPoint);
 
-                StartCoroutine(Attacking());
-                StartCoroutine(AttackCooldown());
-            }
-            else
-            {
-                _collider.enabled = false;
-
-                SetHandLocalPosition(_hand.transform.localPosition, _firstPosition);
-            }
+            StartCoroutine(Attacking());
+            StartCoroutine(AttackCooldown());
         }
         else
         {
-            _collider.enabled = false;
-
-            SetHandLocalPosition(_hand.transform.localPosition, _firstPosition);
+            AttackEnding();
         }
+    }
+
+    protected void AttackEnding()
+    {
+        _collider.enabled = false;
+
+        SetHandLocalPosition(_foreArm.transform.localPosition, _firstPosition);
     }
 
     private void SetHandPosition(Vector3 handPosition, Vector3 settingPosition)
     {
         SetHandRotation(settingPosition);
 
-        _hand.connectedBody = null;
-        _hand.transform.position = Vector3.Lerp(handPosition, settingPosition, _lerpSpeed);
-        _hand.connectedBody = _ConnectedArm;
+        _foreArm.connectedBody = null;
+        _foreArm.transform.position = Vector3.Lerp(handPosition, settingPosition, _lerpSpeed);
+        _foreArm.connectedBody = _ConnectedArm;
     }
 
     private void SetHandLocalPosition(Vector3 handLocalPosition, Vector3 settingPosition)
     {
-        _hand.connectedBody = null;
-        _hand.transform.localPosition = Vector3.Lerp(handLocalPosition, settingPosition, _lerpSpeed);
-        _hand.connectedBody = _ConnectedArm;
+        _foreArm.connectedBody = null;
+        _foreArm.transform.localPosition = Vector3.Lerp(handLocalPosition, settingPosition, _lerpSpeed);
+        _foreArm.connectedBody = _ConnectedArm;
     }
 
     private void SetHandRotation(Vector3 settingPosition)

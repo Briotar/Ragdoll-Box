@@ -42,8 +42,8 @@ public class Enemy : MonoBehaviour
 
             HealthChanged.Invoke(_currentHealth);
 
-            var increaseHitForse = ((_maxHealth - _currentHealth) / 100f) * 2f;
-            _rigidbody.velocity = hitDirection * (hitForse / 2f) * increaseHitForse;
+            var increaseHitForse = ((_maxHealth - _currentHealth) / 100f) * 45f;
+            _rigidbody.AddForce(hitDirection * (hitForse / 2f) * increaseHitForse, ForceMode.VelocityChange);
         }
     }
 

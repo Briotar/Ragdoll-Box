@@ -1,24 +1,19 @@
-using System;
+using System.Collections;
 using UnityEngine;
 
-public class PlayerMover : Mover
+public class PlayerAttacker : Attacker
 {
     [SerializeField] private PlayerInput _playerInput;
-
-    private void Update()
-    {
-        Rotate(_playerInput.Direction);
-    }
 
     private void FixedUpdate()
     {
         if (Input.GetMouseButton(0))
         {
-            Move(_playerInput.Direction);
+            Attack(_playerInput.WorldPosition);
         }
         else
         {
-            ChangeToIdleState();
+            AttackEnding();
         }
     }
 }

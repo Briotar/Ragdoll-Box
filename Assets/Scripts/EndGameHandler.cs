@@ -2,12 +2,12 @@ using UnityEngine;
 
 public class EndGameHandler : MonoBehaviour
 {
-    [SerializeField] private Player _player;
+    [SerializeField] private Damageble _player;
     [SerializeField] private CameraFollower _camera;
 
     private void OnEnable()
     {
-        _player.OnDied += () =>
+        _player.Died += () =>
         {
             EndGame();
         };
@@ -15,7 +15,7 @@ public class EndGameHandler : MonoBehaviour
 
     private void OnDisable()
     {
-        _player.OnDied -= () =>
+        _player.Died -= () =>
         {
             EndGame();
         };

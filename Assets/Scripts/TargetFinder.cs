@@ -10,7 +10,7 @@ public class TargetFinder : MonoBehaviour
 
     public Transform CurrentTarget { get; private set; }
 
-    private void Start()
+    private void Awake()
     {
         _distanceToTargets = new float[_targets.Length];
 

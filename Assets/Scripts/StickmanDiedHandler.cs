@@ -1,11 +1,12 @@
 using UnityEngine;
 
-[RequireComponent(typeof(Damageble))]
-public class Enemy : MonoBehaviour
+public class StickmanDiedHandler : MonoBehaviour
 {
+    [SerializeField] private GameObject _pointer;
+
     private Damageble _stickman;
 
-    private void Awake()
+    private void Start()
     {
         _stickman = GetComponent<Damageble>();
     }
@@ -29,5 +30,7 @@ public class Enemy : MonoBehaviour
     private void DeactivateStickman()
     {
         _stickman.gameObject.SetActive(false);
+        _pointer.SetActive(false);
     }
+
 }

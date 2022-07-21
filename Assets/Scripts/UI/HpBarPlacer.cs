@@ -46,7 +46,6 @@ public class HpBarPlacer : MonoBehaviour
         for (int i = index; i < _hpBar.Length - 1; i++)
         {
             _hpBar[i + 1].transform.localPosition = new Vector2(_hpBar[i + 1].transform.localPosition.x, _hpBarCoodinate[i]);
-            Debug.Log(_hpBar[i + 1].gameObject.name);
         }
     }
 

@@ -10,8 +10,8 @@ public class Mover : MonoBehaviour
     [SerializeField] private float _jumpForce = 1.5f;
     [SerializeField] private float _fallForce = 0.4f;
     [SerializeField] private float _additionalForce = 2f;
-
     [SerializeField] private Rigidbody _rigidbody;
+    [SerializeField] private ParticleSystem _jumpParticle;
 
     private bool _canJump = true;
 
@@ -29,7 +29,7 @@ public class Mover : MonoBehaviour
     protected void Move(Vector3 direction)
     {
         if (StayOnGround(_onGroundPoint.position, _radius))
-            if (direction.y <= 0.25f)
+            if (direction.y <= 0.35f)
             {
                 _rigidbody.velocity = new Vector3(direction.x, 0f, 0f) * _speed;
 
@@ -39,6 +39,7 @@ public class Mover : MonoBehaviour
             {
                 if (_canJump)
                 {
+                    _jumpParticle.Play();
                     _rigidbody.AddForce(Vector3.up * _speed * _jumpForce * _additionalForce, ForceMode.VelocityChange);
                     _rigidbody.AddForce(direction * _jumpForce * _additionalForce, ForceMode.VelocityChange);
 
@@ -75,7 +76,7 @@ public class Mover : MonoBehaviour
 
     private IEnumerator JumpCooldown()
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(1.5f);
 
         _canJump = true;
     }

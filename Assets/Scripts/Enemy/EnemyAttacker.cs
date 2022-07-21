@@ -4,9 +4,9 @@ public class EnemyAttacker : Attacker
 {
     [SerializeField] private TargetFinder _targetFinder;
 
-    private void LateUpdate()
+    private void FixedUpdate()
     {
         Attack(_targetFinder.CurrentTarget.position);
-        AttackEnding();
+        //AttackEnding();
     }
 }

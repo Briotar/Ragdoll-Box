@@ -5,7 +5,9 @@ public class Attacker : MonoBehaviour
 {
     [SerializeField] private Joint _foreArm;
     [SerializeField] private Transform _arm;
+    [SerializeField] private Transform _hand;
     [SerializeField] private Collider _collider;
+    [SerializeField] private ParticleSystem _fireEffect;
 
     private Rigidbody _ConnectedArm;
     private Vector3 _firstPosition;
@@ -19,11 +21,16 @@ public class Attacker : MonoBehaviour
         _firstPosition = _foreArm.transform.localPosition;
     }
 
+    private void Update()
+    {
+        _fireEffect.transform.position = new Vector3(_hand.transform.position.x, _hand.transform.position.y, 9f);
+    }
+
     protected void Attack(Vector3 attackPoint)
     {
         if (_canAttack)
         {
-            _collider.enabled = true;
+            _fireEffect.Play();
 
             SetHandPosition(_foreArm.transform.position, attackPoint);
 
@@ -38,8 +45,6 @@ public class Attacker : MonoBehaviour
 
     protected void AttackEnding()
     {
-        _collider.enabled = false;
-
         SetHandLocalPosition(_foreArm.transform.localPosition, _firstPosition);
     }
 

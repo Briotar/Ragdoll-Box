@@ -1,9 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyPointer : MonoBehaviour
 {
+    [SerializeField] private Damageble _stickman;
     [SerializeField] private Transform _player;
     [SerializeField] private Transform _pointerIcon;
     [SerializeField] private float _distanceToScreenEdge = 1f;
@@ -13,6 +12,22 @@ public class EnemyPointer : MonoBehaviour
     private void Start()
     {
         _camera = Camera.main;
+    }
+
+    private void OnEnable()
+    {
+        _stickman.Died += () =>
+        {
+            DeactivatePointer();
+        };
+    }
+
+    private void OnDisable()
+    {
+        _stickman.Died -= () =>
+        {
+            DeactivatePointer();
+        };
     }
 
     private void Update()
@@ -44,28 +59,10 @@ public class EnemyPointer : MonoBehaviour
         Vector3 worldPostion = ray.GetPoint(minDistance - _distanceToScreenEdge);
 
         _pointerIcon.position = _camera.WorldToScreenPoint(worldPostion);
-        //RotatePointer(index);
     }
 
-    private void RotatePointer(int index)
+    private void DeactivatePointer()
     {
-        switch(index)
-        {
-            case 0:
-                _pointerIcon.rotation = Quaternion.Euler(0f, 0f, 90f);
-                break;
-            case 1:
-                _pointerIcon.rotation = Quaternion.Euler(0f, 0f, -90f);
-                break;
-            case 2:
-                _pointerIcon.rotation = Quaternion.Euler(0f, 0f, 180f);
-                break;
-            case 3:
-                _pointerIcon.rotation = Quaternion.Euler(0f, 0f, 0f);
-                break;
-            default:
-                _pointerIcon.rotation = Quaternion.identity;
-                break;
-        }
+        _pointerIcon.gameObject.SetActive(false);
     }
 }

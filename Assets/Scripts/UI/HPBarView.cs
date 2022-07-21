@@ -4,7 +4,7 @@ using TMPro;
 
 public class HPBarView : MonoBehaviour
 {
-    [SerializeField] private Enemy _stickman;
+    [SerializeField] private Damageble _stickman;
 
     private int indexInList;
     private TMP_Text _text;

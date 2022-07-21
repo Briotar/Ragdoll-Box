@@ -2,13 +2,13 @@ using UnityEngine;
 
 public class GameOverView : MonoBehaviour
 {
-    [SerializeField] private Player _player;
+    [SerializeField] private Damageble _player;
     [SerializeField] private GameObject _gameoverScreen;
     [SerializeField] private GameObject _scrollView;
 
     private void OnEnable()
     {
-        _player.OnDied += () =>
+        _player.Died += () =>
         {
             ShowEndGameScreen();
         };
@@ -16,7 +16,7 @@ public class GameOverView : MonoBehaviour
 
     private void OnDisable()
     {
-        _player.OnDied -= () =>
+        _player.Died -= () =>
         {
             ShowEndGameScreen();
         };

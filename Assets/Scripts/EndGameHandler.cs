@@ -1,9 +1,14 @@
+using System.Collections;
 using UnityEngine;
+using Cinemachine;
 
 public class EndGameHandler : MonoBehaviour
 {
     [SerializeField] private Damageble _player;
-    [SerializeField] private CameraFollower _camera;
+    [SerializeField] private CinemachineVirtualCamera _camera;
+
+    private float _fieldOfView = 35f;
+    private float _lerpSpeed = 3f;
 
     private void OnEnable()
     {
@@ -23,6 +28,18 @@ public class EndGameHandler : MonoBehaviour
 
     private void EndGame()
     {
-        _camera.enabled = false;
+        _camera.Follow = null;
+
+        StartCoroutine(FieldOFViewLerp());
+    }
+
+    private IEnumerator FieldOFViewLerp()
+    {
+        while(_camera.m_Lens.FieldOfView != _fieldOfView)
+        {
+            _camera.m_Lens.FieldOfView = Mathf.Lerp(_camera.m_Lens.FieldOfView, _fieldOfView, Time.deltaTime * _lerpSpeed);
+
+            yield return new WaitForEndOfFrame();
+        }
     }
 }

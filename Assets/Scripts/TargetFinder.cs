@@ -3,40 +3,40 @@ using UnityEngine;
 public class TargetFinder : MonoBehaviour
 {
     [SerializeField] private Transform[] _targets;
+    [SerializeField] private float _timeToChooseNewTarget = 2f;
 
-    private float[] _distanceToTargets;
-    private float minDistance = Mathf.Infinity;
-    private int _currentIndex;
+    private float _currentTime = 0f;
 
     public Transform CurrentTarget { get; private set; }
 
     private void Awake()
     {
-        _distanceToTargets = new float[_targets.Length];
-
         ChooseTarget();
     }
 
     void Update()
     {
-        ChooseTarget();
+        if(_currentTime >= _timeToChooseNewTarget)
+        {
+            ChooseTarget();
+
+            _currentTime = 0f;
+        }
+        else
+        {
+            _currentTime += Time.deltaTime;
+        }
     }
     
     private void ChooseTarget()
     {
-        for (int i = 0; i < _targets.Length; i++)
-        {
-            _distanceToTargets[i] = (gameObject.transform.position - _targets[i].position).magnitude;
+        System.Random random = new System.Random();
+        var index = random.Next(0, _targets.Length);
 
-            if (_distanceToTargets[i] < minDistance)
-            {
-                minDistance = _distanceToTargets[i];
-                _currentIndex = i;
-            }
-        }
-
-        CurrentTarget = _targets[_currentIndex];
-        minDistance = Mathf.Infinity;
+        if(_targets[index].gameObject.activeInHierarchy)
+            CurrentTarget = _targets[index];
+        else
+            CurrentTarget = _targets[0];
     }
 }
 

@@ -5,6 +5,7 @@ using UnityEngine;
 public class Damageble : MonoBehaviour
 {
     [SerializeField] private Rigidbody _rigidbody;
+    [SerializeField] private ParticleSystem _stunParticle;
 
     private float _maxHealth = 100f;
     private float _currentHealth;
@@ -31,6 +32,8 @@ public class Damageble : MonoBehaviour
     {
         if (_canApplyDamage)
         {
+            _stunParticle.Play();
+
             _canApplyDamage = false;
             StartCoroutine(CantApplyDamage());
 
@@ -50,6 +53,7 @@ public class Damageble : MonoBehaviour
     {
         yield return new WaitForSeconds(1f);
 
+        _stunParticle.Stop();
         _canApplyDamage = true;
     }
 }
